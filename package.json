@@ -1,0 +1,25 @@
+{
+  "name": "aplikasi-belanja-online-api",
+  "version": "1.0.0",
+  "description": "Mini-project pendamping untuk materi slide `Materi-Pertemuan-08-Pengujian-API-Postman-Automation.pptx`.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiaamelia35/aplikasi-belanja-online-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/tiaamelia35/aplikasi-belanja-online-api/issues"
+  },
+  "homepage": "https://github.com/tiaamelia35/aplikasi-belanja-online-api#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
