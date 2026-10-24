@@ -105,7 +105,7 @@ app.get('/produk', (req, res, next) => {
         hasil = hasil.filter(item => item.stok <= Number(maxStok));
     }
 
-    // 2. SORTING: mengurutkan data berdasarkan field
+    // 2. SORTING: hasil dapat diurutkan & field response dapat dipilih.
     const { sortBy, order } = req.query;
 
     const fieldDiizinkan = ['id', 'nama', 'harga', 'stok'];
@@ -124,7 +124,7 @@ app.get('/produk', (req, res, next) => {
         });
     }
 
-    // 3. PAGINATION: menentukan halaman dan jumlah data
+    // 3. PAGINATION: endpoint daftar data mendukung page & limit dengan batas maksimum
     
     // Validasi parameter pagination
     for (const parameter of ['page', 'limit']) {
@@ -150,6 +150,7 @@ app.get('/produk', (req, res, next) => {
     const mulai = (page - 1) * limit;
 
     hasil = hasil.slice(mulai, mulai + limit);
+
 
     // 4. PROJECTION: memilih field yang ditampilkan
     if (req.query.fields) {
@@ -201,9 +202,6 @@ app.get('/produk/:id', (req, res, next) => {
 
 
 
-
-
-
 /* POST: Menambahkan produk */
 app.post('/produk', (req, res) => {
     const { nama, harga, stok } = req.body;
@@ -225,7 +223,6 @@ app.post('/produk', (req, res) => {
     });
 });
 
-/* PUT: Mengubah produk */
 
 /* PUT: Mengubah produk */
 app.put('/produk/:id', (req, res, next) => {
