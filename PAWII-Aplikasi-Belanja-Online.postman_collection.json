@@ -1,0 +1,160 @@
+
+{
+  "info": {
+    "name": "PAWII - Aplikasi Belanja Online API",
+    "description": "Automated testing API Aplikasi Belanja Online menggunakan Newman dan MongoDB Atlas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET Cek Server",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Respons berisi pesan server', function () { pm.expect(pm.response.json().pesan).to.eql('API Aplikasi Belanja Online berhasil dijalankan'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/"
+      }
+    },
+    {
+      "name": "GET Semua Produk",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Respons memiliki struktur pagination dan data', function () { var json = pm.response.json(); pm.expect(json).to.have.property('halaman'); pm.expect(json).to.have.property('totalData'); pm.expect(json.data).to.be.an('array'); });",
+              "pm.test('Setiap produk memiliki nama, harga, dan stok', function () { pm.response.json().data.forEach(function (produk) { pm.expect(produk).to.have.property('nama'); pm.expect(produk).to.have.property('harga'); pm.expect(produk).to.have.property('stok'); }); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/produk"
+      }
+    },
+    {
+      "name": "POST Tambah Produk",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code 201', function () { pm.response.to.have.status(201); });",
+              "pm.test('Produk berhasil dibuat dan memiliki ID', function () { var json = pm.response.json(); pm.expect(json.pesan).to.eql('Produk berhasil ditambahkan'); pm.expect(json.data).to.have.property('_id'); pm.expect(json.data.nama).to.eql('Keyboard Newman'); pm.environment.set('produkId', json.data._id); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nama\": \"Keyboard Newman\",\n  \"harga\": 125000,\n  \"stok\": 12\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/produk"
+      }
+    },
+    {
+      "name": "GET Satu Produk",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('ID produk sesuai dengan hasil POST', function () { pm.expect(pm.response.json()._id).to.eql(pm.environment.get('produkId')); });",
+              "pm.test('Data produk memiliki nama yang benar', function () { pm.expect(pm.response.json().nama).to.eql('Keyboard Newman'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/produk/{{produkId}}"
+      }
+    },
+    {
+      "name": "PUT Update Produk",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Harga produk berhasil diubah', function () { var json = pm.response.json(); pm.expect(json.pesan).to.eql('Produk berhasil diubah'); pm.expect(json.data.harga).to.eql(130000); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"harga\": 130000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/produk/{{produkId}}"
+      }
+    },
+    {
+      "name": "DELETE Hapus Produk",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Produk berhasil dihapus', function () { pm.expect(pm.response.json().pesan).to.eql('Produk berhasil dihapus'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{base_url}}/produk/{{produkId}}"
+      }
+    }
+  ]
+}
